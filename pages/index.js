@@ -9,6 +9,7 @@ export default function Home() {
     title: "",
     cpa: "",
     cma: "",
+    space: "",
     token: "",
   };
   const initialConfig = {
@@ -20,7 +21,7 @@ export default function Home() {
   const {
     addEntry,
     keys,
-    key: { title, cpa, cma, token },
+    key: { title, cpa, cma, space, token },
   } = config;
   useEffect(() => {
     const hasData = localStorage?.getItem("keyPassData");
@@ -30,9 +31,10 @@ export default function Home() {
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { title, cpa, cma, token } = e.target.elements || {};
+    const { title, space, cpa, cma, token } = e.target.elements || {};
     const validData = Boolean(
       title?.value?.trim() &&
+        space?.value?.trim() &&
         cpa?.value?.trim() &&
         cma?.value?.trim() &&
         token?.value?.trim()
@@ -124,6 +126,17 @@ export default function Home() {
               />
             </div>
             <div className={styles.group}>
+              <label htmlFor="space">SpaceID</label>
+              <input
+                id="space"
+                name="space"
+                onChange={handleChange}
+                value={space}
+                placeholder="SpaceID"
+                required
+              />
+            </div>
+            <div className={styles.group}>
               <label htmlFor="cpa">CPA</label>
               <input
                 id="cpa"
@@ -146,7 +159,7 @@ export default function Home() {
               />
             </div>
             <div className={styles.group}>
-              <label htmlFor="token">Token</label>
+              <label htmlFor="token">Access Token</label>
               <input
                 id="token"
                 name="token"
@@ -163,13 +176,15 @@ export default function Home() {
           <div className={styles.rows}>
             <div className={styles.captions}>
               <div>Title</div>
+              <div>SpaceID</div>
               <div>CMA</div>
               <div>CPA</div>
               <div>Token</div>
             </div>
-            {keys?.map(({ id, title, cma, cpa, token }) => (
+            {keys?.map(({ id, title, space, cma, cpa, token }) => (
               <div key={id} className={styles.row}>
                 {title && <div>{title}</div>}
+                {space && <div>{space}</div>}
                 {cma && <div>{cma}</div>}
                 {cpa && <div>{cpa}</div>}
                 {token && <div>{token}</div>}
