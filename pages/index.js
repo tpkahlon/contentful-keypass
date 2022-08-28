@@ -1,17 +1,16 @@
-import { v4 as uuidv4 } from "uuid";
+import {
+  FaPlus,
+  FaSave,
+  FaTrash,
+  FaFileImport,
+  FaFileExport,
+} from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { initialKey, STRINGS } from "../utils";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const initialKey = {
-    id: uuidv4(),
-    title: "",
-    cpa: "",
-    cda: "",
-    space: "",
-    token: "",
-  };
   const initialConfig = {
     keys: [],
     key: initialKey,
@@ -24,7 +23,7 @@ export default function Home() {
     key: { title, cpa, cda, space, token },
   } = config;
   useEffect(() => {
-    const hasData = localStorage?.getItem("keyPassData");
+    const hasData = localStorage?.getItem(STRINGS.AUTH_TOKEN);
     const setConfigData = hasData ? JSON.parse(hasData) : initialConfig;
     setConfig(setConfigData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,7 +48,7 @@ export default function Home() {
         };
       });
     } else {
-      alert("Please enter a valid entry.");
+      alert(STRINGS.INVALID_ENTRY);
     }
   };
   const handleAddSite = () => {
@@ -74,18 +73,17 @@ export default function Home() {
   };
   const handleSave = (newConfig) => {
     const saveThis = newConfig || config;
-    console.log("save", saveThis, newConfig, config);
-    localStorage?.setItem("keyPassData", JSON.stringify(saveThis));
+    localStorage?.setItem(STRINGS.AUTH_TOKEN, JSON.stringify(saveThis));
   };
   const handleClear = () => {
-    localStorage?.removeItem("keyPassData");
+    localStorage?.removeItem(STRINGS.AUTH_TOKEN);
     setConfig(initialConfig);
   };
   const handleExport = () => {
     alert(JSON.stringify(config));
   };
   const handleImport = () => {
-    const data = prompt("Please enter exported config data.");
+    const data = prompt(STRINGS.INVALID_EXPORT);
     if (!data) return;
     setConfig(JSON.parse(data));
     handleSave(JSON.parse(data));
@@ -93,93 +91,128 @@ export default function Home() {
   return (
     <div className={styles.app}>
       <Head>
-        <title>Contentful KeyPass</title>
-        <meta
-          name="description"
-          content="Contentful KeyPass is a tool to assist web developers who work with Contentful sites on a daily basis."
-        />
+        <title>{STRINGS.SITE_TITLE}</title>
+        <meta name="description" content={STRINGS.SITE_INFO} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.grid}>
-        <header>
-          Contentful KeyPass is a tool to assist web developers who work with
-          Contentful sites on a daily basis.
-        </header>
+        <header>{STRINGS.SITE_INFO}</header>
         <div className={styles.buttons}>
-          <button onClick={handleAddSite}>+ Add Site</button>
-          <button onClick={() => handleSave()}>Save</button>
-          <button onClick={handleClear}>Clear</button>
-          <button onClick={handleImport}>Import</button>
-          <button onClick={handleExport}>Export</button>
+          <button
+            className={styles.iconButton}
+            onClick={handleAddSite}
+            title={STRINGS.ADD_LABEL}
+            aria-label={STRINGS.ADD_LABEL}
+          >
+            <FaPlus />
+          </button>
+          <button
+            className={styles.iconButton}
+            onClick={() => handleSave()}
+            title={STRINGS.SAVE_LABEL}
+            aria-label={STRINGS.SAVE_LABEL}
+          >
+            <FaSave />
+          </button>
+          <button
+            className={styles.iconButton}
+            onClick={handleClear}
+            title={STRINGS.CLEAR_LABEL}
+            aria-label={STRINGS.CLEAR_LABEL}
+          >
+            <FaTrash />
+          </button>
+          <button
+            className={styles.iconButton}
+            onClick={handleImport}
+            title={STRINGS.IMPORT_LABEL}
+            aria-label={STRINGS.IMPORT_LABEL}
+          >
+            <FaFileImport />
+          </button>
+          <button
+            className={styles.iconButton}
+            onClick={handleExport}
+            title={STRINGS.EXPORT_LABEL}
+            aria-label={STRINGS.EXPORT_LABEL}
+          >
+            <FaFileExport />
+          </button>
         </div>
         {addEntry && (
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.group}>
-              <label htmlFor="title">Title</label>
+              <label htmlFor={STRINGS.TITLE.toLowerCase()}>
+                {STRINGS.TITLE}
+              </label>
               <input
-                id="title"
-                name="title"
+                id={STRINGS.TITLE.toLowerCase()}
+                name={STRINGS.TITLE.toLowerCase()}
                 onChange={handleChange}
                 value={title}
-                placeholder="Title"
+                placeholder={STRINGS.TITLE}
                 required
               />
             </div>
             <div className={styles.group}>
-              <label htmlFor="space">SpaceID</label>
+              <label htmlFor={STRINGS.SPACE.toLowerCase()}>
+                {STRINGS.SPACE_ID}
+              </label>
               <input
-                id="space"
-                name="space"
+                id={STRINGS.SPACE.toLowerCase()}
+                name={STRINGS.SPACE.toLowerCase()}
                 onChange={handleChange}
                 value={space}
-                placeholder="SpaceID"
+                placeholder={STRINGS.SPACE_ID}
                 required
               />
             </div>
             <div className={styles.group}>
-              <label htmlFor="cpa">CPA</label>
+              <label htmlFor={STRINGS.CDA.toLowerCase()}>{STRINGS.CDA}</label>
               <input
-                id="cpa"
-                name="cpa"
-                onChange={handleChange}
-                value={cpa}
-                placeholder="CPA"
-                required
-              />
-            </div>
-            <div className={styles.group}>
-              <label htmlFor="cda">CDA</label>
-              <input
-                id="cda"
-                name="cda"
+                id={STRINGS.CDA.toLowerCase()}
+                name={STRINGS.CDA.toLowerCase()}
                 onChange={handleChange}
                 value={cda}
-                placeholder="CDA"
+                placeholder={STRINGS.CDA}
                 required
               />
             </div>
             <div className={styles.group}>
-              <label htmlFor="token">Access Token</label>
+              <label htmlFor={STRINGS.CPA.toLowerCase()}>{STRINGS.CPA}</label>
               <input
-                id="token"
-                name="token"
+                id={STRINGS.CPA.toLowerCase()}
+                name={STRINGS.CPA.toLowerCase()}
                 onChange={handleChange}
-                value={token}
-                placeholder="Token"
+                value={cpa}
+                placeholder={STRINGS.CPA}
                 required
               />
             </div>
-            <button type="submit">+ Add Entry</button>
+            <div className={styles.group}>
+              <label htmlFor={STRINGS.TOKEN.toLowerCase()}>
+                {STRINGS.ACCESS_TOKEN}
+              </label>
+              <input
+                id={STRINGS.TOKEN.toLowerCase()}
+                name={STRINGS.TOKEN.toLowerCase()}
+                onChange={handleChange}
+                value={token}
+                placeholder={STRINGS.TOKEN}
+                required
+              />
+            </div>
+            <button type="submit">{STRINGS.ADD_ENTRY}</button>
           </form>
         )}
         {keys?.length > 0 && (
           <div className={styles.rows}>
             <div className={styles.captions}>
-              <div>Title</div>
-              <div>SpaceID</div>
-              <div>CDA</div>
-              <div>CPA</div>
-              <div>Token</div>
+              <div>{STRINGS.TITLE}</div>
+              <div>{STRINGS.SPACE_ID}</div>
+              <div>{STRINGS.CDA}</div>
+              <div>{STRINGS.CPA}</div>
+              <div>{STRINGS.TOKEN}</div>
             </div>
             {keys?.map(({ id, title, space, cda, cpa, token }) => (
               <div key={id} className={styles.row}>
