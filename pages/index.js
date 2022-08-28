@@ -8,7 +8,7 @@ export default function Home() {
     id: uuidv4(),
     title: "",
     cpa: "",
-    cma: "",
+    cda: "",
     space: "",
     token: "",
   };
@@ -21,7 +21,7 @@ export default function Home() {
   const {
     addEntry,
     keys,
-    key: { title, cpa, cma, space, token },
+    key: { title, cpa, cda, space, token },
   } = config;
   useEffect(() => {
     const hasData = localStorage?.getItem("keyPassData");
@@ -31,12 +31,12 @@ export default function Home() {
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { title, space, cpa, cma, token } = e.target.elements || {};
+    const { title, space, cpa, cda, token } = e.target.elements || {};
     const validData = Boolean(
       title?.value?.trim() &&
         space?.value?.trim() &&
         cpa?.value?.trim() &&
-        cma?.value?.trim() &&
+        cda?.value?.trim() &&
         token?.value?.trim()
     );
     if (validData) {
@@ -148,13 +148,13 @@ export default function Home() {
               />
             </div>
             <div className={styles.group}>
-              <label htmlFor="cma">CMA</label>
+              <label htmlFor="cda">CDA</label>
               <input
-                id="cma"
-                name="cma"
+                id="cda"
+                name="cda"
                 onChange={handleChange}
-                value={cma}
-                placeholder="CMA"
+                value={cda}
+                placeholder="CDA"
                 required
               />
             </div>
@@ -177,15 +177,15 @@ export default function Home() {
             <div className={styles.captions}>
               <div>Title</div>
               <div>SpaceID</div>
-              <div>CMA</div>
+              <div>CDA</div>
               <div>CPA</div>
               <div>Token</div>
             </div>
-            {keys?.map(({ id, title, space, cma, cpa, token }) => (
+            {keys?.map(({ id, title, space, cda, cpa, token }) => (
               <div key={id} className={styles.row}>
                 {title && <div>{title}</div>}
                 {space && <div>{space}</div>}
-                {cma && <div>{cma}</div>}
+                {cda && <div>{cda}</div>}
                 {cpa && <div>{cpa}</div>}
                 {token && <div>{token}</div>}
               </div>
